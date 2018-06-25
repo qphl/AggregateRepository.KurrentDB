@@ -11,7 +11,7 @@
     <PackageLicenseUrl>https://github.com/cognisant/AggregateRepository.EventStore/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/cognisant/AggregateRepository.EventStore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/cognisant/AggregateRepository.EventStore</RepositoryUrl>
-    <PackageIconUrl>https://github.com/cognisant/AggregateRepository.EventStore/blob/master/logo.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/cognisant/AggregateRepository.EventStore/master/logo.png</PackageIconUrl>
     <PackageTags>Event Store, Event Sourcing, Aggregate Repository, Cognisant</PackageTags>
     <Product>CR.AggregateRepository</Product>
     <PackageReleaseNotes>https://GitHub.com/Cognisant/AggregateRepository.EventStore/releases/tag/$(Tag)</PackageReleaseNotes>
