@@ -4,14 +4,12 @@
 
 namespace AggregateRepository.EventStore.Tests
 {
-    extern alias EventStoreNetFrameworkClient;
-
     using System.Threading;
-    using EventStoreNetFrameworkClient::EventStore.ClientAPI.Embedded;
-    using EventStoreNetFrameworkClient::EventStore.Core;
-    using EventStoreNetFrameworkClient::EventStore.Core.Bus;
-    using EventStoreNetFrameworkClient::EventStore.Core.Messages;
-    using EventStoreNetFrameworkClient::EventStore.Core.Services.Monitoring;
+    using global::EventStore.ClientAPI.Embedded;
+    using global::EventStore.Core;
+    using global::EventStore.Core.Bus;
+    using global::EventStore.Core.Messages;
+    using global::EventStore.Core.Services.Monitoring;
 
     public class EmbeddedEventStore
     {

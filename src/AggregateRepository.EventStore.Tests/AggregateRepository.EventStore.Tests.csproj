@@ -41,17 +41,41 @@
     <Reference Include="CR.AggregateRepository.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CR.AggregateRepository.Core.1.0.0-rc0001\lib\netstandard2.0\CR.AggregateRepository.Core.dll</HintPath>
     </Reference>
-    <Reference Include="EventStore.ClientAPI, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EventStore.Client.4.1.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
-      <Aliases>EventStoreNetFrameworkClient</Aliases>
+    <Reference Include="EventStore.BufferManagement, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.BufferManagement.dll</HintPath>
     </Reference>
-    <Reference Include="EventStore.ClientAPI.Embedded, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EventStore.Client.Embedded.4.1.1\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
-      <Aliases>EventStoreNetFrameworkClient</Aliases>
+    <Reference Include="EventStore.ClientAPI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.ClientAPI.dll</HintPath>
     </Reference>
-    <Reference Include="EventStore.ClientAPI.NetCore, Version=4.1.0.23, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EventStore.ClientAPI.NetCore.4.1.0.23\lib\netstandard2.0\EventStore.ClientAPI.NetCore.dll</HintPath>
-      <Aliases>EventStoreNetCoreClient</Aliases>
+    <Reference Include="EventStore.ClientAPI.Embedded, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.ClientAPI.Embedded.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Common, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Common.Utils, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.Common.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Native, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.Native.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Projections.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.Projections.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Rags, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.Rags.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Transport.Http, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.Transport.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Transport.Tcp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.Transport.Tcp.dll</HintPath>
+    </Reference>
+    <Reference Include="HdrHistogram, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HdrHistogram.2.5.0\lib\net45\HdrHistogram.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.CodeCoverage.Shim, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeCoverage.15.8.0-preview-20180610-02\lib\net45\Microsoft.VisualStudio.CodeCoverage.Shim.dll</HintPath>
@@ -59,20 +83,31 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.10\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net, Version=2.3.2.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
+    <Reference Include="protobuf-net, Version=2.4.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.4.0\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.5.2.1\lib\net45\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateRepositoryTestFixture.cs" />
@@ -99,12 +134,12 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.10.1\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\packages\EventStore.Client.Embedded.4.1.1\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EventStore.Client.Embedded.4.1.1\build\EventStore.Client.Embedded.targets'))" />
     <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeCoverage.15.8.0-preview-20180610-02\build\netstandard1.0\Microsoft.CodeCoverage.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeCoverage.15.8.0-preview-20180610-02\build\netstandard1.0\Microsoft.CodeCoverage.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.NET.Test.Sdk.15.7.2\build\net45\Microsoft.Net.Test.Sdk.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NET.Test.Sdk.15.7.2\build\net45\Microsoft.Net.Test.Sdk.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.NET.Test.Sdk.15.7.2\build\net45\Microsoft.Net.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NET.Test.Sdk.15.7.2\build\net45\Microsoft.Net.Test.Sdk.targets'))" />
+    <Error Condition="!Exists('..\packages\EventStore.Client.Embedded.5.0.0\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EventStore.Client.Embedded.5.0.0\build\EventStore.Client.Embedded.targets'))" />
   </Target>
-  <Import Project="..\packages\EventStore.Client.Embedded.4.1.1\build\EventStore.Client.Embedded.targets" Condition="Exists('..\packages\EventStore.Client.Embedded.4.1.1\build\EventStore.Client.Embedded.targets')" />
   <Import Project="..\packages\Microsoft.NET.Test.Sdk.15.7.2\build\net45\Microsoft.Net.Test.Sdk.targets" Condition="Exists('..\packages\Microsoft.NET.Test.Sdk.15.7.2\build\net45\Microsoft.Net.Test.Sdk.targets')" />
+  <Import Project="..\packages\EventStore.Client.Embedded.5.0.0\build\EventStore.Client.Embedded.targets" Condition="Exists('..\packages\EventStore.Client.Embedded.5.0.0\build\EventStore.Client.Embedded.targets')" />
 </Project>
