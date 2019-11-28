@@ -15,4 +15,4 @@ curl -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 dotnet test .\\src\\AggregateRepository.EventStore.Tests\\AggregateRepository.EventStore.Tests.csproj
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-dotnet pack .\\src\\AggregateRepository.EventStore\\AggregateRepository.EventStore.csproj -o ..\\..\\dist -p:Version="$version" -p:PackageVersion="$version" -p:Tag="$tag" -c Release
+dotnet pack .\\src\\AggregateRepository.EventStore\\AggregateRepository.EventStore.csproj -o .\\dist -p:Version="$version" -p:PackageVersion="$version" -p:Tag="$tag" -c Release
