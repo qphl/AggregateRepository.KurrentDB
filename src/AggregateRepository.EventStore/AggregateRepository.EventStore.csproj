@@ -2,19 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>CR.AggregateRepository.EventStore</AssemblyName>
-    <RootNamespace>CR.AggregateRepository.EventStore</RootNamespace>
-    <Authors>Cognisant Research</Authors>
-    <Company>Cognisant Research</Company>
+    <AssemblyName>CorshamScience.AggregateRepository.EventStore</AssemblyName>
+    <RootNamespace>CorshamScience.AggregateRepository.EventStore</RootNamespace>
+    <Authors>Corsham Science</Authors>
+    <Company>Corsham Science</Company>
     <Description>EventStore implementation for saving and rebuilding objects from event streams.</Description>
-    <Copyright>Cognisant Research 2018</Copyright>
-    <PackageLicenseUrl>https://github.com/cognisant/AggregateRepository.EventStore/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/cognisant/AggregateRepository.EventStore</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/cognisant/AggregateRepository.EventStore</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/cognisant/AggregateRepository.EventStore/master/logo.png</PackageIconUrl>
-    <PackageTags>Event Store, Event Sourcing, Aggregate Repository, Cognisant</PackageTags>
-    <Product>CR.AggregateRepository</Product>
-    <PackageReleaseNotes>https://GitHub.com/Cognisant/AggregateRepository.EventStore/releases/tag/$(Tag)</PackageReleaseNotes>
+    <Copyright>Corsham Science 2019</Copyright>
+    <PackageProjectUrl>https://github.com/qphl/AggregateRepository.EventStore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/qphl/AggregateRepository.EventStore</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/qphl/AggregateRepository.EventStore/master/logo.png</PackageIconUrl>
+    <PackageTags>Event Store, Event Sourcing, Aggregate Repository</PackageTags>
+    <Product>CorshamScience.AggregateRepository</Product>
+    <PackageReleaseNotes>https://GitHub.com/qphl/AggregateRepository.EventStore/releases/tag/</PackageReleaseNotes>
+    <PackageId>CorshamScience.AggregateRepository.EventStore</PackageId>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageIcon>Logo.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,13 +30,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CR.CodeStyle.CSharp.Full" Version="[1.0.1,2.0.0-0)">
-      <PrivateAssets>All</PrivateAssets>
+
+    <PackageReference Include="CorshamScience.AggregateRepository.Core" Version="2.0.0" />
+
+    <PackageReference Include="CorshamScience.CodeStyle.CSharp.Full" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="CR.AggregateRepository.Core" Version="[1.0.0-rc0001,2.0.0-a)" />
-
     <PackageReference Include="EventStore.Client" Version="[5.0.1,6.0.0-a)" />
+  </ItemGroup>
+
+   <ItemGroup>
+    <None Include="Logo.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
   </ItemGroup>
 
 </Project>
