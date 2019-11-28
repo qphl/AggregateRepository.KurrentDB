@@ -11,8 +11,8 @@
     <ProjectGuid>{6972CC70-3F3B-4CBF-8829-CF61A3EE47E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AggregateRepository.EventStore.Tests</RootNamespace>
-    <AssemblyName>AggregateRepository.EventStore.Tests</AssemblyName>
+    <RootNamespace>CorshamScience.AggregateRepository.EventStore.Tests</RootNamespace>
+    <AssemblyName>CorshamScience.AggregateRepository.EventStore.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -38,8 +38,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CR.AggregateRepository.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CR.AggregateRepository.Core.1.0.0-rc0001\lib\netstandard2.0\CR.AggregateRepository.Core.dll</HintPath>
+    <Reference Include="CorshamScience.AggregateRepository.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CorshamScience.AggregateRepository.Core.2.0.0\lib\netstandard2.0\CorshamScience.AggregateRepository.Core.dll</HintPath>
     </Reference>
     <Reference Include="EventStore.BufferManagement, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EventStore.Client.Embedded.5.0.0\lib\net471\EventStore.BufferManagement.dll</HintPath>

@@ -1,8 +1,8 @@
-﻿// <copyright file="EmbeddedEventStore.cs" company="Cognisant">
-// Copyright (c) Cognisant. All rights reserved.
+﻿// <copyright file="EmbeddedEventStore.cs" company="Corsham Science">
+// Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 
-namespace AggregateRepository.EventStore.Tests
+namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
     using System.Threading;
     using global::EventStore.ClientAPI.Embedded;

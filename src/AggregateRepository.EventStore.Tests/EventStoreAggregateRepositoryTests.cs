@@ -1,10 +1,10 @@
-﻿// <copyright file="EventStoreAggregateRepositoryTests.cs" company="Cognisant">
-// Copyright (c) Cognisant. All rights reserved.
+﻿// <copyright file="EventStoreAggregateRepositoryTests.cs" company="Corsham Science">
+// Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 
-namespace AggregateRepository.EventStore.Tests
+namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
-    using CR.AggregateRepository.EventStore;
+    using CorshamScience.AggregateRepository.EventStore;
     using global::EventStore.ClientAPI;
     using global::EventStore.ClientAPI.Embedded;
 

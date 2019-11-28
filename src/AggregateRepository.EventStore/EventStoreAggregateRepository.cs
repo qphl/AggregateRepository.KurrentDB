@@ -1,14 +1,14 @@
-﻿// <copyright file="EventStoreAggregateRepository.cs" company="Cognisant">
-// Copyright (c) Cognisant. All rights reserved.
+﻿// <copyright file="EventStoreAggregateRepository.cs" company="Corsham Science">
+// Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 
-namespace CR.AggregateRepository.EventStore
+namespace CorshamScience.AggregateRepository.EventStore
 {
     using System;
     using System.Linq;
     using System.Text;
-    using Core;
-    using Core.Exceptions;
+    using CorshamScience.AggregateRepository.Core;
+    using CorshamScience.AggregateRepository.Core.Exceptions;
     using global::EventStore.ClientAPI;
     using global::EventStore.ClientAPI.Exceptions;
     using Newtonsoft.Json;
@@ -16,7 +16,7 @@ namespace CR.AggregateRepository.EventStore
 
     /// <inheritdoc />
     /// <summary>
-    /// Implementation of <see cref="T:CR.AggregateRepository.Core.IAggregateRepository" /> which uses Event Store as underlying storage for an aggregate's events.
+    /// Implementation of <see cref="T:CorshamScience.AggregateRepository.Core.IAggregateRepository" /> which uses Event Store as underlying storage for an aggregate's events.
     /// </summary>
     public class EventStoreAggregateRepository : IAggregateRepository
     {
