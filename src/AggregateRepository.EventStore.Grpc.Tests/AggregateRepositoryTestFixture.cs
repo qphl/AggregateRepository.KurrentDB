@@ -1,8 +1,7 @@
 ﻿using CorshamScience.AggregateRepository.Core;
 using CorshamScience.AggregateRepository.Core.Exceptions;
-using CorshamScience.AggregateRepository.EventStore.Grpc.Tests;
 
-namespace AggregateRepository.EventStore.Grpc.Tests
+namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
 {
     internal abstract class AggregateRepositoryTestFixture
     {

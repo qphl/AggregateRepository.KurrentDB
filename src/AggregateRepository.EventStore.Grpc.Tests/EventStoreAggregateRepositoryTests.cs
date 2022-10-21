@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AggregateRepository.EventStore.Grpc.Tests
+﻿namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
 {
     internal class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixture
     {

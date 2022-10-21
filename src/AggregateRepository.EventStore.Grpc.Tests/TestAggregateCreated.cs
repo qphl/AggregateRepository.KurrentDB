@@ -1,8 +1,4 @@
-﻿// <copyright file="TestAggregateCreated.cs" company="Cognisant">
-// Copyright (c) Cognisant. All rights reserved.
-// </copyright>
-
-namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
+﻿namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
 {
     internal class TestAggregateCreated
     {

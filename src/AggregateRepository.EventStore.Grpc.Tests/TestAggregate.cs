@@ -1,8 +1,4 @@
-﻿// <copyright file="TestAggregate.cs" company="Corsham Science">
-// Copyright (c) Corsham Science. All rights reserved.
-// </copyright>
-
-namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
+﻿namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
 {
     using System;
     using System.Collections.Generic;
