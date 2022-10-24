@@ -71,39 +71,29 @@ namespace CorshamScience.AggregateRepository.EventStore
                 throw new InvalidOperationException("Cannot get version <= 0");
             }
 
-            var eventsCount = 0;
             var streamName = StreamNameForAggregateId(aggregateId);
             var aggregate = (T)Activator.CreateInstance(typeof(T), true)!;
 
-            try
+            var readResult = _eventStoreClient.ReadStreamAsync(
+                Direction.Forwards,
+                streamName,
+                StreamPosition.Start,
+                version);
+
+            if (readResult.ReadState.Result != ReadState.Ok)
             {
-                var readResult = _eventStoreClient.ReadStreamAsync(
-                    Direction.Forwards,
-                    streamName,
-                    StreamPosition.Start,
-                    version);
-
-                if (readResult.ReadState.Result == ReadState.StreamNotFound)
-                {
-                    throw new StreamNotFoundException(streamName);
-                }
-
-                var events = readResult.ToListAsync().Result;
-
-                foreach (var @event in events)
-                {
-                    aggregate.ApplyEvent(Deserialize(@event));
-                }
-
-                eventsCount += events.Count;
+                throw new AggregateNotFoundException(streamName);
             }
-            catch (StreamNotFoundException e)
+
+            var events = readResult.ToListAsync().Result;
+
+            foreach (var @event in events)
             {
-                throw new AggregateNotFoundException(e.Message, e);
+                aggregate.ApplyEvent(Deserialize(@event));
             }
 
             // if version is greater than number of events, throw exception
-            if (eventsCount < version && version != int.MaxValue)
+            if (events.Count < version && version != int.MaxValue)
             {
                 throw new AggregateVersionException("version is higher than actual version");
             }
