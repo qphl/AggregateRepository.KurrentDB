@@ -2,7 +2,7 @@
 // Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 
-namespace AggregateRepository.EventStore
+namespace CorshamScience.AggregateRepository.EventStore
 {
     using CorshamScience.AggregateRepository.Core;
     using CorshamScience.AggregateRepository.Core.Exceptions;
@@ -20,7 +20,7 @@ namespace AggregateRepository.EventStore
         private readonly EventStoreClient _eventStoreClient;
 
         /// <summary>
-        /// Initialises a new instance of a <see cref="EventStoreAggregateRepository"/>.
+        /// Initialises a new instance of the <see cref="EventStoreAggregateRepository"/> class.
         /// </summary>
         /// <param name="eventStoreClient">The GRPC <see cref="EventStoreClient"/> to connect to.</param>
         public EventStoreAggregateRepository(EventStoreClient eventStoreClient) => _eventStoreClient = eventStoreClient;

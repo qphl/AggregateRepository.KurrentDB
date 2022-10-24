@@ -1,6 +1,6 @@
 ﻿namespace AggregateRepository.EventStore.Tests
 {
-    using EventStore;
+    using CorshamScience.AggregateRepository.EventStore;
     using DotNet.Testcontainers.Builders;
     using DotNet.Testcontainers.Containers;
     using DotNet.Testcontainers.Images;
