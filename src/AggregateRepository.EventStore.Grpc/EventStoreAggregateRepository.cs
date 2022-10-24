@@ -81,7 +81,8 @@ namespace AggregateRepository.EventStore.Grpc
                 var readResult = _eventStoreClient.ReadStreamAsync(
                     Direction.Forwards,
                     streamName,
-                    StreamPosition.Start);
+                    StreamPosition.Start,
+                    version);
 
                 if (readResult.ReadState.Result == ReadState.StreamNotFound)
                 {
@@ -123,7 +124,8 @@ namespace AggregateRepository.EventStore.Grpc
                 return StreamRevision.None;
             }
 
-            return lastEvent.FirstAsync().Result.Event.EventNumber.ToUInt64();
+            return lastEvent.FirstAsync().Result.Event.EventNumber
+                .ToUInt64();
         }
 
         private static EventData ToEventData(object @event)

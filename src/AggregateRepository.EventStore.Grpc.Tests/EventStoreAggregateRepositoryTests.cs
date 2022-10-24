@@ -16,15 +16,9 @@ namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
               .WithImage(new DockerImage("eventstore/eventstore:20.10.2-buster-slim"))
               .WithName("eventstore")
               .WithPortBinding(2113)
-              .WithPortBinding(1113)
               .WithEnvironment(new Dictionary<string, string>()
               {
-                  { "EVENTSTORE_CLUSTER_SIZE", "1" },
-                  { "EVENTSTORE_RUN_PROJECTIONS", "All" },
-                  { "EVENTSTORE_START_STANDARD_PROJECTIONS", "true" },
-                  { "EVENTSTORE_EXT_TCP_PORT", "1113" },
                   { "EVENTSTORE_INSECURE", "true" },
-                  { "EVENTSTORE_ENABLE_EXTERNAL_TCP", "true" },
                   { "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP", "true" }
               })
               .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(2113))
