@@ -118,7 +118,12 @@ namespace AggregateRepository.EventStore.Grpc
                             streamName,
                             StreamPosition.End, 1);
 
-            return lastEvent.FirstAsync().Result.Event?.EventNumber.ToUInt64() ?? StreamRevision.None;
+            if (lastEvent.ReadState.Result == ReadState.StreamNotFound)
+            {
+                return StreamRevision.None;
+            }
+
+            return lastEvent.FirstAsync().Result.Event.EventNumber.ToUInt64();
         }
 
         private static EventData ToEventData(object @event)

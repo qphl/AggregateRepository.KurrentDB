@@ -8,7 +8,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
 {
     internal class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixture
     {
-        private EventStoreClient _client;
+        private EventStoreClient? _client;
 
         protected async override Task InitRepositoryAsync()
         {
@@ -39,12 +39,9 @@ namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
             RepoUnderTest = new EventStoreAggregateRepository(_client);
         }
 
-        protected async override Task CleanUpRepositoryAsync()
+        protected override void CleanUpRepository()
         {
             _client?.Dispose();
-
-
-            //await _container.DisposeAsync();
         }        
     }
 }

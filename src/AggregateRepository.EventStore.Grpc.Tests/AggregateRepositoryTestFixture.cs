@@ -11,16 +11,21 @@ namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
 
         protected IAggregateRepository RepoUnderTest { get; set; }
 
-        [SetUp]
-        public async Task SetUp()
+        [OneTimeSetUp]
+        public async Task OneTimeSetUp()
         {
-            await InitRepositoryAsync();
+            await InitRepositoryAsync();            
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
             _aggregateIdUnderTest = Guid.NewGuid().ToString();
             _storedEvents = new List<Guid>();
         }
 
-        [TearDown]
-        public Task TearDown() => CleanUpRepositoryAsync();
+        [OneTimeTearDown]
+        public void OneTimeTearDown() => CleanUpRepository();
 
         [Test]
         public void Retreiving_an_aggregate_from_an_empty_eventstore_should_throw_an_exception() => Assert.Throws<AggregateNotFoundException>(() => RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest));
@@ -186,6 +191,6 @@ namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
 
         protected abstract Task InitRepositoryAsync();
 
-        protected abstract Task CleanUpRepositoryAsync();
+        protected abstract void CleanUpRepository();
     }
 }
