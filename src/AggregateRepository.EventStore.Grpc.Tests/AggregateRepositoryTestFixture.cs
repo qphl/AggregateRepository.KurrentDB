@@ -1,8 +1,8 @@
-﻿using CorshamScience.AggregateRepository.Core;
-using CorshamScience.AggregateRepository.Core.Exceptions;
-
-namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
+﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
+    using CorshamScience.AggregateRepository.Core;
+    using CorshamScience.AggregateRepository.Core.Exceptions;
+
     internal abstract class AggregateRepositoryTestFixture
     {
         private List<Guid> _storedEvents = new List<Guid>();

@@ -2,7 +2,7 @@
 // Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 
-namespace AggregateRepository.EventStore.Grpc
+namespace AggregateRepository.EventStore
 {
     using CorshamScience.AggregateRepository.Core;
     using CorshamScience.AggregateRepository.Core.Exceptions;

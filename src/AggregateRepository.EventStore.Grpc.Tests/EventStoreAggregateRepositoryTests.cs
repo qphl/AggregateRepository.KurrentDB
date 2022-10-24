@@ -1,11 +1,11 @@
-﻿using AggregateRepository.EventStore.Grpc;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
-using DotNet.Testcontainers.Images;
-using EventStore.Client;
-
-namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
+﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
+    using global::AggregateRepository.EventStore;
+    using DotNet.Testcontainers.Builders;
+    using DotNet.Testcontainers.Containers;
+    using DotNet.Testcontainers.Images;
+    using global::EventStore.Client;
+
     internal class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixture
     {
         private EventStoreClient? _client;

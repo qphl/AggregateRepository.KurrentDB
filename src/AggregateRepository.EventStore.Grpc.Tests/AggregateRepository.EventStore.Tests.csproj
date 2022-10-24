@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AggregateRepository.EventStore.Grpc\AggregateRepository.EventStore.Grpc.csproj" />
+    <ProjectReference Include="..\AggregateRepository.EventStore.Grpc\AggregateRepository.EventStore.csproj" />
   </ItemGroup>
 
 </Project>

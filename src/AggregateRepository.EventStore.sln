@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AggregateRepository.EventStore.Grpc.Tests", "AggregateRepository.EventStore.Grpc.Tests\AggregateRepository.EventStore.Grpc.Tests.csproj", "{A533A8AA-1DD0-48B5-8B00-A6FD458AF537}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AggregateRepository.EventStore.Tests", "AggregateRepository.EventStore.Grpc.Tests\AggregateRepository.EventStore.Tests.csproj", "{A533A8AA-1DD0-48B5-8B00-A6FD458AF537}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AggregateRepository.EventStore.Grpc", "AggregateRepository.EventStore.Grpc\AggregateRepository.EventStore.Grpc.csproj", "{84F46E35-1EE8-414F-9A40-FF855D2C5894}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AggregateRepository.EventStore", "AggregateRepository.EventStore.Grpc\AggregateRepository.EventStore.csproj", "{84F46E35-1EE8-414F-9A40-FF855D2C5894}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
