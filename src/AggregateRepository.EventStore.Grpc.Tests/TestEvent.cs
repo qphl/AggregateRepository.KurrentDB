@@ -1,4 +1,4 @@
-﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
+﻿namespace AggregateRepository.EventStore.Tests
 {
     using System;
 

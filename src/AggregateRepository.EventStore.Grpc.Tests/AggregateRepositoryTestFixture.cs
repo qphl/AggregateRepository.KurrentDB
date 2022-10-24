@@ -1,15 +1,15 @@
-﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
+﻿namespace AggregateRepository.EventStore.Tests
 {
     using CorshamScience.AggregateRepository.Core;
     using CorshamScience.AggregateRepository.Core.Exceptions;
 
     internal abstract class AggregateRepositoryTestFixture
     {
-        private List<Guid> _storedEvents = new List<Guid>();
-        private TestAggregate _retrievedAggregate;
-        private string _aggregateIdUnderTest;
+        private List<Guid> _storedEvents = new();
+        private TestAggregate _retrievedAggregate = null!;
+        private string _aggregateIdUnderTest = null!;
 
-        protected IAggregateRepository RepoUnderTest { get; set; }
+        protected IAggregateRepository RepoUnderTest { get; set; } = null!;
 
         [OneTimeSetUp]
         public async Task OneTimeSetUp()
@@ -82,7 +82,7 @@
 
             foreach (var id in _storedEvents)
             {
-                Assert.Contains(id, _retrievedAggregate.EventsApplied);
+                Assert.That(_retrievedAggregate.EventsApplied, Does.Contain(id));
             }
         }
 
@@ -108,7 +108,7 @@
 
             foreach (var id in _storedEvents)
             {
-                Assert.Contains(id, _retrievedAggregate.EventsApplied);
+                Assert.That(_retrievedAggregate.EventsApplied, Does.Contain(id));
             }
         }
 
@@ -158,7 +158,7 @@
 
             foreach (var id in _storedEvents)
             {
-                Assert.Contains(id, _retrievedAggregate.EventsApplied);
+                Assert.That(_retrievedAggregate.EventsApplied, Does.Contain(id));
             }
         }
 

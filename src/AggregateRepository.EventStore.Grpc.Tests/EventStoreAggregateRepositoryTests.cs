@@ -1,6 +1,6 @@
-﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
+﻿namespace AggregateRepository.EventStore.Tests
 {
-    using global::AggregateRepository.EventStore;
+    using EventStore;
     using DotNet.Testcontainers.Builders;
     using DotNet.Testcontainers.Containers;
     using DotNet.Testcontainers.Images;
@@ -10,32 +10,30 @@
     {
         private EventStoreClient? _client;
 
-        protected async override Task InitRepositoryAsync()
+        protected override async Task InitRepositoryAsync()
         {
+            const int hostPort = 2113;
             var container = new TestcontainersBuilder<TestcontainersContainer>()
               .WithImage(new DockerImage("eventstore/eventstore:20.10.2-buster-slim"))
               .WithName("eventstore")
-              .WithPortBinding(2113)
-              .WithEnvironment(new Dictionary<string, string>()
+              .WithPortBinding(hostPort)
+              .WithEnvironment(new Dictionary<string, string>
               {
                   { "EVENTSTORE_INSECURE", "true" },
-                  { "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP", "true" }
+                  { "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP", "true" },
               })
-              .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(2113))
+              .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(hostPort))
               .Build();
 
             await container.StartAsync();
 
             var settings = EventStoreClientSettings
-            .Create("esdb://admin:changeit@127.0.0.1:2113?tls=false");
+            .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=false");
 
             _client = new EventStoreClient(settings);
             RepoUnderTest = new EventStoreAggregateRepository(_client);
         }
 
-        protected override void CleanUpRepository()
-        {
-            _client?.Dispose();
-        }        
+        protected override void CleanUpRepository() => _client?.Dispose();
     }
 }

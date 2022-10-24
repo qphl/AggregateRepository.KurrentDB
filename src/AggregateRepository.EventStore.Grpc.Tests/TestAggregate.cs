@@ -1,12 +1,10 @@
-﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
+﻿namespace AggregateRepository.EventStore.Tests
 {
-    using System;
-    using System.Collections.Generic;
     using CorshamScience.AggregateRepository.Core;
 
     internal sealed class TestAggregate : AggregateBase
     {
-        private object _id;
+        private object _id = null!;
 
         public TestAggregate(string aggregateId) => RaiseEvent(new TestAggregateCreated(aggregateId));
 

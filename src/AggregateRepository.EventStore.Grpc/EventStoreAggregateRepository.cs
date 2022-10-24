@@ -20,14 +20,14 @@ namespace AggregateRepository.EventStore
         private readonly EventStoreClient _eventStoreClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventStoreAggregateRepository"/> class using the provided <see cref="IEventStoreConnection"/> to store and retrieve events for an <see cref="IAggregate"/>.
+        /// Initialises a new instance of a <see cref="EventStoreAggregateRepository"/>.
         /// </summary>
-        /// <param name="connection">The <see cref="IEventStoreConnection"/> to read from and write to.</param>
+        /// <param name="eventStoreClient">The GRPC <see cref="EventStoreClient"/> to connect to.</param>
         public EventStoreAggregateRepository(EventStoreClient eventStoreClient) => _eventStoreClient = eventStoreClient;
 
         /// <inheritdoc />
         /// <exception cref="AggregateNotFoundException">
-        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="IEventStoreConnection"/> is configured to use.
+        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="EventStoreClient"/> is configured to use.
         /// </exception>
         public void Save(IAggregate aggregateToSave)
         {
