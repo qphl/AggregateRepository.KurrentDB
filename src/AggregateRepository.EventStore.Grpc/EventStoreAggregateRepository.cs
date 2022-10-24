@@ -35,16 +35,15 @@ namespace AggregateRepository.EventStore.Grpc
             var streamName = StreamNameForAggregateId(aggregateToSave.Id);
 
             var originalVersion = aggregateToSave.Version - events.Count;
+            ulong expectedVersion = originalVersion == 0 ? expectedVersion = StreamRevision.None : (ulong)(originalVersion - 1);
 
             var preparedEvents = events
                 .Select(ToEventData)
                 .ToArray();
 
-            ulong lastRevision = GetLatestRevision(streamName);
-
             try
             {
-                _eventStoreClient.AppendToStreamAsync(streamName, lastRevision, preparedEvents).Wait();
+                _eventStoreClient.AppendToStreamAsync(streamName, expectedVersion, preparedEvents).Wait();
                 aggregateToSave.ClearUncommittedEvents();
             }
             catch (StreamDeletedException ex)
@@ -110,22 +109,6 @@ namespace AggregateRepository.EventStore.Grpc
             }
 
             return aggregate;
-        }
-
-        private ulong GetLatestRevision(string streamName)
-        {
-            var lastEvent = _eventStoreClient.ReadStreamAsync(
-                            Direction.Backwards,
-                            streamName,
-                            StreamPosition.End, 1);
-
-            if (lastEvent.ReadState.Result == ReadState.StreamNotFound)
-            {
-                return StreamRevision.None;
-            }
-
-            return lastEvent.FirstAsync().Result.Event.EventNumber
-                .ToUInt64();
         }
 
         private static EventData ToEventData(object @event)
