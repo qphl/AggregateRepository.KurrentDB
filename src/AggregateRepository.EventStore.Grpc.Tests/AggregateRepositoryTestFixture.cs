@@ -52,8 +52,12 @@
             RepoUnderTest.Save(aggregate);
 
             _retrievedAggregate = RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest);
-            Assert.AreEqual(_aggregateIdUnderTest, _retrievedAggregate.Id);
-            Assert.AreEqual(0, _retrievedAggregate.EventsApplied.Count);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(_retrievedAggregate.Id, Is.EqualTo(_aggregateIdUnderTest));
+                Assert.That(_retrievedAggregate.EventsApplied.Count, Is.EqualTo(0));
+            });
         }
 
         [Test]
@@ -70,8 +74,12 @@
             RepoUnderTest.Save(aggregate);
             _retrievedAggregate = RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest);
 
-            Assert.AreEqual(_aggregateIdUnderTest, _retrievedAggregate.Id);
-            Assert.AreEqual(_storedEvents.Count, _retrievedAggregate.EventsApplied.Count);
+            Assert.Multiple(() =>
+            {
+                Assert.That(_retrievedAggregate.Id, Is.EqualTo(_aggregateIdUnderTest));
+                Assert.That(_retrievedAggregate.EventsApplied.Count, Is.EqualTo(_storedEvents.Count));
+            });
+
             foreach (var id in _storedEvents)
             {
                 Assert.Contains(id, _retrievedAggregate.EventsApplied);
@@ -92,12 +100,32 @@
             RepoUnderTest.Save(aggregate);
             _retrievedAggregate = RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest, 6);
 
-            Assert.AreEqual(_aggregateIdUnderTest, _retrievedAggregate.Id);
-            Assert.AreEqual(_storedEvents.Count, _retrievedAggregate.EventsApplied.Count);
+            Assert.Multiple(() =>
+            {
+                Assert.That(_retrievedAggregate.Id, Is.EqualTo(_aggregateIdUnderTest));
+                Assert.That(_retrievedAggregate.EventsApplied.Count, Is.EqualTo(_storedEvents.Count));
+            });
+
             foreach (var id in _storedEvents)
             {
                 Assert.Contains(id, _retrievedAggregate.EventsApplied);
             }
+        }
+
+        [Test]
+        public void Retrieving_an_aggregate_with_events_when_specifying_an_incorrect_version_throws_aggregate_not_found_exception()
+        {
+            var aggregate = new TestAggregate(_aggregateIdUnderTest);
+            for (var i = 0; i < 5; i++)
+            {
+                var eventId = Guid.NewGuid();
+                _storedEvents.Add(eventId);
+                aggregate.GenerateEvent(eventId);
+            }
+
+            RepoUnderTest.Save(aggregate);
+
+            Assert.Throws<AggregateVersionException>(() => RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest, 10));
         }
 
         [Test]
@@ -122,8 +150,12 @@
             RepoUnderTest.Save(secondAggregate);
             _retrievedAggregate = RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest);
 
-            Assert.AreEqual(_aggregateIdUnderTest, _retrievedAggregate.Id);
-            Assert.AreEqual(_storedEvents.Count, _retrievedAggregate.EventsApplied.Count);
+            Assert.Multiple(() =>
+            {
+                Assert.That(_retrievedAggregate.Id, Is.EqualTo(_aggregateIdUnderTest));
+                Assert.That(_retrievedAggregate.EventsApplied.Count, Is.EqualTo(_storedEvents.Count));
+            });
+
             foreach (var id in _storedEvents)
             {
                 Assert.Contains(id, _retrievedAggregate.EventsApplied);
@@ -142,11 +174,16 @@
             _retrievedAggregate.GenerateEvent(eventId);
 
             RepoUnderTest.Save(_retrievedAggregate);
+
             var actualAggregate = RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest);
 
-            Assert.AreEqual(1, actualAggregate.EventsApplied.Count);
-            Assert.AreEqual(_aggregateIdUnderTest, actualAggregate.Id);
-            Assert.AreEqual(eventId, actualAggregate.EventsApplied[0]);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualAggregate.EventsApplied.Count, Is.EqualTo(1));
+                Assert.That(actualAggregate.Id, Is.EqualTo(_aggregateIdUnderTest));
+                Assert.That(actualAggregate.EventsApplied[0], Is.EqualTo(eventId));
+                Assert.That(actualAggregate.Version, Is.EqualTo(2));
+            });
         }
 
         [Test]
