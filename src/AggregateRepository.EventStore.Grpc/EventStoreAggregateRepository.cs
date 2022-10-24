@@ -17,8 +17,6 @@ namespace AggregateRepository.EventStore.Grpc
     /// </summary>
     public class EventStoreAggregateRepository : IAggregateRepository
     {
-        private const int _readPageSize = 1000;
-
         private readonly EventStoreClient _eventStoreClient;
 
         /// <summary>
@@ -63,16 +61,6 @@ namespace AggregateRepository.EventStore.Grpc
 
                 throw;
             }
-        }
-
-        private ulong GetLatestRevision(string streamName)
-        {
-            var lastEvent = _eventStoreClient.ReadStreamAsync(
-                            Direction.Backwards,
-                            streamName,
-                            StreamPosition.End, 1);
-
-            return lastEvent.FirstAsync().Result.Event.EventNumber.ToUInt64();
         }
 
         /// <inheritdoc />
@@ -121,6 +109,16 @@ namespace AggregateRepository.EventStore.Grpc
             }
 
             return aggregate;
+        }
+
+        private ulong GetLatestRevision(string streamName)
+        {
+            var lastEvent = _eventStoreClient.ReadStreamAsync(
+                            Direction.Backwards,
+                            streamName,
+                            StreamPosition.End, 1);
+
+            return lastEvent.FirstAsync().Result.Event?.EventNumber.ToUInt64() ?? 0;
         }
 
         private static EventData ToEventData(object @event)
