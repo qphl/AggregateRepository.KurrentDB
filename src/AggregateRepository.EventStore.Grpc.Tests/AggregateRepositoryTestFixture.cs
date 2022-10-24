@@ -12,9 +12,9 @@ namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
         protected IAggregateRepository RepoUnderTest { get; set; }
 
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
-            InitRepository();
+            await InitRepositoryAsync();
             _aggregateIdUnderTest = Guid.NewGuid().ToString();
             _storedEvents = new List<Guid>();
         }
@@ -184,7 +184,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Grpc.Tests
             Assert.Throws<AggregateVersionException>(() => RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest, 10));
         }
 
-        protected abstract void InitRepository();
+        protected abstract Task InitRepositoryAsync();
 
         protected abstract void CleanUpRepository();
     }

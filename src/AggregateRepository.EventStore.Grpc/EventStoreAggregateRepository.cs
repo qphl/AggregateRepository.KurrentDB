@@ -1,21 +1,36 @@
-﻿using CorshamScience.AggregateRepository.Core;
-using CorshamScience.AggregateRepository.Core.Exceptions;
-using EventStore.Client;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Text;
+﻿// <copyright file="EventStoreAggregateRepository.cs" company="Corsham Science">
+// Copyright (c) Corsham Science. All rights reserved.
+// </copyright>
 
 namespace AggregateRepository.EventStore.Grpc
 {
+    using CorshamScience.AggregateRepository.Core;
+    using CorshamScience.AggregateRepository.Core.Exceptions;
+    using global::EventStore.Client;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using System.Text;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// Implementation of <see cref="T:CorshamScience.AggregateRepository.Core.IAggregateRepository" /> which uses Event Store as underlying storage for an aggregate's events.
+    /// </summary>
     public class EventStoreAggregateRepository : IAggregateRepository
     {
+        private const int _readPageSize = 1000;
+
         private readonly EventStoreClient _eventStoreClient;
 
-        public EventStoreAggregateRepository(EventStoreClient eventStoreClient)
-        {
-            _eventStoreClient = eventStoreClient;
-        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventStoreAggregateRepository"/> class using the provided <see cref="IEventStoreConnection"/> to store and retrieve events for an <see cref="IAggregate"/>.
+        /// </summary>
+        /// <param name="connection">The <see cref="IEventStoreConnection"/> to read from and write to.</param>
+        public EventStoreAggregateRepository(EventStoreClient eventStoreClient) => _eventStoreClient = eventStoreClient;
 
+        /// <inheritdoc />
+        /// <exception cref="AggregateNotFoundException">
+        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="IEventStoreConnection"/> is configured to use.
+        /// </exception>
         public void Save(IAggregate aggregateToSave)
         {
             var events = aggregateToSave.GetUncommittedEvents().Cast<object>().ToList();
@@ -27,13 +42,8 @@ namespace AggregateRepository.EventStore.Grpc
                 .Select(ToEventData)
                 .ToArray();
 
-            var readResult = _eventStoreClient.ReadStreamAsync(
-                Direction.Forwards,
-                streamName,
-                StreamPosition.Start);
+            ulong lastRevision = GetLatestRevision(streamName);
 
-            var lastRevision = readResult.LastAsync().Result.Event.EventNumber.ToUInt64();
-            
             try
             {
                 _eventStoreClient.AppendToStreamAsync(streamName, lastRevision, preparedEvents).Wait();
@@ -55,7 +65,18 @@ namespace AggregateRepository.EventStore.Grpc
             }
         }
 
-        public T GetAggregateFromRepository<T>(object aggregateId, int version = 2147483647)
+        private ulong GetLatestRevision(string streamName)
+        {
+            var lastEvent = _eventStoreClient.ReadStreamAsync(
+                            Direction.Backwards,
+                            streamName,
+                            StreamPosition.End, 1);
+
+            return lastEvent.FirstAsync().Result.Event.EventNumber.ToUInt64();
+        }
+
+        /// <inheritdoc />
+        public T GetAggregateFromRepository<T>(object aggregateId, int version = int.MaxValue)
             where T : IAggregate
         {
             if (version <= 0)
@@ -63,8 +84,9 @@ namespace AggregateRepository.EventStore.Grpc
                 throw new InvalidOperationException("Cannot get version <= 0");
             }
 
+            var eventsCount = 0;
             var streamName = StreamNameForAggregateId(aggregateId);
-            var instance = (T)Activator.CreateInstance(typeof(T), true)!;
+            var aggregate = (T)Activator.CreateInstance(typeof(T), true)!;
 
             try
             {
@@ -73,19 +95,32 @@ namespace AggregateRepository.EventStore.Grpc
                     streamName,
                     StreamPosition.Start);
 
+                if (readResult.ReadState.Result == ReadState.StreamNotFound)
+                {
+                    throw new StreamNotFoundException(streamName);
+                }
+
                 var events = readResult.ToListAsync().Result;
 
                 foreach (var @event in events)
                 {
-                    instance.ApplyEvent(Deserialize(@event));
+                    aggregate.ApplyEvent(Deserialize(@event));
                 }
+
+                eventsCount += events.Count;
             }
-            catch (StreamNotFoundException)
+            catch (StreamNotFoundException e)
             {
-                throw new AggregateNotFoundException();
+                throw new AggregateNotFoundException(e.Message, e);
             }
 
-            return instance;
+            // if version is greater than number of events, throw exception
+            if (eventsCount < version && version != int.MaxValue)
+            {
+                throw new AggregateVersionException("version is higher than actual version");
+            }
+
+            return aggregate;
         }
 
         private static EventData ToEventData(object @event)
@@ -109,13 +144,15 @@ namespace AggregateRepository.EventStore.Grpc
 
         private static object Deserialize(ResolvedEvent resolvedEvent)
         {
+            const string metaDataPropertyName = "ClrType";
+
             var jsonData = Encoding.UTF8.GetString(resolvedEvent.Event.Data.Span);
             var metaData = Encoding.UTF8.GetString(resolvedEvent.Event.Metadata.Span);
-            var eventClrTypeName = JObject.Parse(metaData).Property("ClrType")?.Value;
+            var eventClrTypeName = JObject.Parse(metaData).Property(metaDataPropertyName)?.Value;
 
-            if (eventClrTypeName == null)
+            if (eventClrTypeName is null)
             {
-                throw new Exception("Event metadata has no property ClrType");
+                throw new InvalidOperationException($"Event Metadata has no property '{metaDataPropertyName}'");
             }
 
             return JsonConvert.DeserializeObject(jsonData, Type.GetType((string)eventClrTypeName));
