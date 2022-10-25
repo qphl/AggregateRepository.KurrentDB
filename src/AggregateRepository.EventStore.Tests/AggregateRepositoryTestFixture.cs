@@ -1,4 +1,4 @@
-﻿namespace AggregateRepository.EventStore.Tests
+﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
     using CorshamScience.AggregateRepository.Core;
     using CorshamScience.AggregateRepository.Core.Exceptions;

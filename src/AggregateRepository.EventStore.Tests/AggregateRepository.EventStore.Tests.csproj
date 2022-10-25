@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AggregateRepository.EventStore.Grpc\AggregateRepository.EventStore.csproj" />
+    <ProjectReference Include="..\AggregateRepository.EventStore\AggregateRepository.EventStore.csproj" />
   </ItemGroup>
 
 </Project>

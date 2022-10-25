@@ -1,4 +1,4 @@
-﻿namespace AggregateRepository.EventStore.Tests
+﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
     internal class TestAggregateCreated
     {
