@@ -4,12 +4,47 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>CorshamScience.AggregateRepository.EventStore</AssemblyName>
+    <RootNamespace>CorshamScience.AggregateRepository.EventStore</RootNamespace>
+    <Authors>Corsham Science</Authors>
+    <Company>Corsham Science</Company>
+    <Description>EventStore implementation for saving and rebuilding objects from event streams.</Description>
+    <Copyright>Corsham Science 2022</Copyright>
+    <PackageProjectUrl>https://github.com/qphl/AggregateRepository.EventStore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/qphl/AggregateRepository.EventStore</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/qphl/AggregateRepository.EventStore/master/logo.png</PackageIconUrl>
+    <PackageTags>Event Store, Event Sourcing, Aggregate Repository</PackageTags>
+    <Product>CorshamScience.AggregateRepository</Product>
+    <PackageReleaseNotes>https://GitHub.com/qphl/AggregateRepository.EventStore/releases/tag/</PackageReleaseNotes>
+    <PackageId>CorshamScience.AggregateRepository.EventStore</PackageId>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageIcon>Logo.png</PackageIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\CorshamScience.AggregateRepository.EventStore.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <DocumentationFile>bin\Release\netstandard2.0\CorshamScience.AggregateRepository.Persistence.EventStore.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CorshamScience.AggregateRepository.Core" Version="2.0.0" />
+    <PackageReference Include="CorshamScience.CodeStyle.CSharp.Full" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="EventStore.Client.Grpc.Streams" Version="22.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Logo.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
 </Project>

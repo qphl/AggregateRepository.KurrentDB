@@ -1,4 +1,8 @@
-﻿namespace CorshamScience.AggregateRepository.EventStore.Tests
+﻿// <copyright file="EventStoreAggregateRepositoryTests.cs" company="Corsham Science">
+// Copyright (c) Corsham Science. All rights reserved.
+// </copyright>
+
+namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
     using CorshamScience.AggregateRepository.EventStore;
     using DotNet.Testcontainers.Builders;

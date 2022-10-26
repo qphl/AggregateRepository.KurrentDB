@@ -4,12 +4,12 @@
 
 namespace CorshamScience.AggregateRepository.EventStore
 {
+    using System.Text;
     using CorshamScience.AggregateRepository.Core;
     using CorshamScience.AggregateRepository.Core.Exceptions;
     using global::EventStore.Client;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using System.Text;
 
     /// <inheritdoc />
     /// <summary>
@@ -20,7 +20,7 @@ namespace CorshamScience.AggregateRepository.EventStore
         private readonly EventStoreClient _eventStoreClient;
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="EventStoreAggregateRepository"/> class.
+        /// Initializes a new instance of the <see cref="EventStoreAggregateRepository"/> class using the provided <see cref="EventStoreClient"/> to store and retrieve events for an <see cref="IAggregate"/>.
         /// </summary>
         /// <param name="eventStoreClient">The GRPC <see cref="EventStoreClient"/> to connect to.</param>
         public EventStoreAggregateRepository(EventStoreClient eventStoreClient) => _eventStoreClient = eventStoreClient;
@@ -72,7 +72,7 @@ namespace CorshamScience.AggregateRepository.EventStore
             }
 
             var streamName = StreamNameForAggregateId(aggregateId);
-            var aggregate = (T)Activator.CreateInstance(typeof(T), true)!;
+            var aggregate = (T)Activator.CreateInstance(typeof(T), true) !;
 
             var readResult = _eventStoreClient.ReadStreamAsync(
                 Direction.Forwards,
@@ -113,7 +113,7 @@ namespace CorshamScience.AggregateRepository.EventStore
             var metadata = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(eventHeaders));
             var typeName = @event.GetType().Name;
 
-            return new(
+            return new (
                 Uuid.NewUuid(),
                 typeName,
                 data,
