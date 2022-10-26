@@ -4,6 +4,7 @@
 
 namespace CorshamScience.AggregateRepository.EventStore
 {
+    using System;
     using System.Text;
     using CorshamScience.AggregateRepository.Core;
     using CorshamScience.AggregateRepository.Core.Exceptions;
@@ -72,28 +73,33 @@ namespace CorshamScience.AggregateRepository.EventStore
             }
 
             var streamName = StreamNameForAggregateId(aggregateId);
+            var events = ReadFromStream(streamName, version);
+
+            try
+            {
+                return CreateAndRehydrateAggregateAsync<T>(events, version).Result;
+            }
+            catch (AggregateException ex) when (ex.InnerException is AggregateVersionException)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+        private static async Task<T> CreateAndRehydrateAggregateAsync<T>(EventStoreClient.ReadStreamResult events, int version)
+            where T : IAggregate
+        {
             var aggregate = (T)Activator.CreateInstance(typeof(T), true) !;
 
-            var readResult = _eventStoreClient.ReadStreamAsync(
-                Direction.Forwards,
-                streamName,
-                StreamPosition.Start,
-                version);
+            var eventCount = 0;
 
-            if (readResult.ReadState.Result != ReadState.Ok)
+            await foreach (var @event in events)
             {
-                throw new AggregateNotFoundException(streamName);
-            }
-
-            var events = readResult.ToListAsync().Result;
-
-            foreach (var @event in events)
-            {
+                eventCount++;
                 aggregate.ApplyEvent(Deserialize(@event));
             }
 
-            // if version is greater than number of events, throw exception
-            if (events.Count < version && version != int.MaxValue)
+            // If version is greater than number of events, throw exception
+            if (eventCount < version && version != int.MaxValue)
             {
                 throw new AggregateVersionException("version is higher than actual version");
             }
@@ -137,5 +143,21 @@ namespace CorshamScience.AggregateRepository.EventStore
         }
 
         private static string StreamNameForAggregateId(object id) => "aggregate-" + id;
+
+        private EventStoreClient.ReadStreamResult ReadFromStream(string streamName, int version)
+        {
+            var events = _eventStoreClient.ReadStreamAsync(
+                Direction.Forwards,
+                streamName,
+                StreamPosition.Start,
+                version);
+
+            if (events.ReadState.Result != ReadState.Ok)
+            {
+                throw new AggregateNotFoundException(streamName);
+            }
+
+            return events;
+        }
     }
 }
