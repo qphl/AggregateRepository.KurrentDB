@@ -19,7 +19,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
             const int hostPort = 2113;
             var container = new TestcontainersBuilder<TestcontainersContainer>()
               .WithImage(new DockerImage("eventstore/eventstore:20.10.2-buster-slim"))
-              .WithName("eventstore")
+              .WithName("aggregate-repository-eventstore-tests")
               .WithPortBinding(hostPort)
               .WithEnvironment(new Dictionary<string, string>
               {
