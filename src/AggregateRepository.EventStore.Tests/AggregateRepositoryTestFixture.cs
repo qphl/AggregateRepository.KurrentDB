@@ -29,7 +29,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
         }
 
         [OneTimeTearDown]
-        public void OneTimeTearDown() => CleanUpRepository();
+        public async Task OneTimeTearDown() => await CleanUpRepositoryAsync();
 
         [Test]
         public void Retreiving_an_aggregate_from_an_empty_eventstore_should_throw_an_exception() => Assert.Throws<AggregateNotFoundException>(() => RepoUnderTest.GetAggregateFromRepository<TestAggregate>(_aggregateIdUnderTest));
@@ -232,6 +232,6 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
 
         protected abstract Task InitRepositoryAsync();
 
-        protected abstract void CleanUpRepository();
+        protected abstract Task CleanUpRepositoryAsync();
     }
 }

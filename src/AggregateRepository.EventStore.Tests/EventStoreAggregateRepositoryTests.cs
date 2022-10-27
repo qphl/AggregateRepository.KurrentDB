@@ -12,14 +12,16 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
 
     internal class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixture
     {
+        private ITestcontainersContainer? _container;
         private EventStoreClient? _client;
 
         protected override async Task InitRepositoryAsync()
         {
             const int hostPort = 2113;
-            var container = new TestcontainersBuilder<TestcontainersContainer>()
+            _container = new TestcontainersBuilder<TestcontainersContainer>()
               .WithImage(new DockerImage("eventstore/eventstore:20.10.2-buster-slim"))
               .WithName("aggregate-repository-eventstore-tests")
+              .WithCleanUp(true)
               .WithPortBinding(hostPort)
               .WithEnvironment(new Dictionary<string, string>
               {
@@ -29,7 +31,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
               .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(hostPort))
               .Build();
 
-            await container.StartAsync();
+            await _container.StartAsync();
 
             var settings = EventStoreClientSettings
             .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=false");
@@ -38,6 +40,14 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
             RepoUnderTest = new EventStoreAggregateRepository(_client);
         }
 
-        protected override void CleanUpRepository() => _client?.Dispose();
+        protected async override Task CleanUpRepositoryAsync()
+        {
+            if (_container != null)
+            {
+                await _container.DisposeAsync();
+            }
+            
+            _client?.Dispose();
+        }
     }
 }
