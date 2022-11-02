@@ -132,14 +132,26 @@ namespace CorshamScience.AggregateRepository.EventStore
 
             var jsonData = Encoding.UTF8.GetString(resolvedEvent.Event.Data.Span);
             var metaData = Encoding.UTF8.GetString(resolvedEvent.Event.Metadata.Span);
-            var eventClrTypeName = JObject.Parse(metaData).Property(metaDataPropertyName)?.Value;
+            var eventClrTypeName = JObject.Parse(metaData).Property(metaDataPropertyName)?.Value?.ToObject<string>();
 
             if (eventClrTypeName is null)
             {
                 throw new InvalidOperationException($"Event Metadata has no property '{metaDataPropertyName}'");
             }
 
-            return JsonConvert.DeserializeObject(jsonData, Type.GetType((string)eventClrTypeName));
+            var type = Type.GetType(eventClrTypeName);
+            if (type is null)
+            {
+                throw new InvalidOperationException($"Could not find type ${eventClrTypeName}");
+            }
+
+            var deserialized = JsonConvert.DeserializeObject(jsonData, type);
+            if (deserialized is null)
+            {
+                throw new InvalidOperationException($"Failed to deserialize event of type ${eventClrTypeName}");
+            }
+
+            return deserialized;
         }
 
         private static string StreamNameForAggregateId(object id) => "aggregate-" + id;

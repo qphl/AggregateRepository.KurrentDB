@@ -2,6 +2,9 @@
 // Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 
+using System.Runtime.InteropServices;
+using Grpc.Core.Interceptors;
+
 namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
     using CorshamScience.AggregateRepository.EventStore;
@@ -17,10 +20,15 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
 
         protected override async Task InitRepositoryAsync()
         {
-            const int hostPort = 2113;
+            const string eventStoreVersion = "21.10.8";
+            string imageName = RuntimeInformation.OSArchitecture == Architecture.Arm64
+                // if on arm (like an m1 mac) use the alpha arm image from github
+                ? $"ghcr.io/eventstore/eventstore:{eventStoreVersion}-alpha-arm64v8"
+                : $"eventstore/eventstore:{eventStoreVersion}-buster-slim";
+            
+            const int hostPort = 2113; 
             _container = new TestcontainersBuilder<TestcontainersContainer>()
-              .WithImage(new DockerImage("eventstore/eventstore:20.10.2-buster-slim"))
-              .WithName("aggregate-repository-eventstore-tests")
+              .WithImage(new DockerImage(imageName))
               .WithCleanUp(true)
               .WithPortBinding(hostPort)
               .WithEnvironment(new Dictionary<string, string>
@@ -34,20 +42,23 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
             await _container.StartAsync();
 
             var settings = EventStoreClientSettings
-            .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=false");
+                .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=false");
 
             _client = new EventStoreClient(settings);
             RepoUnderTest = new EventStoreAggregateRepository(_client);
         }
 
-        protected async override Task CleanUpRepositoryAsync()
+        protected override async Task CleanUpRepositoryAsync()
         {
             if (_container != null)
             {
                 await _container.DisposeAsync();
             }
-            
-            _client?.Dispose();
+
+            if (_client != null)
+            {
+                await _client.DisposeAsync();
+            }
         }
     }
 }

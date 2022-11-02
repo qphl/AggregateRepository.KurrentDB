@@ -16,10 +16,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
         protected IAggregateRepository RepoUnderTest { get; set; } = null!;
 
         [OneTimeSetUp]
-        public async Task OneTimeSetUp()
-        {
-            await InitRepositoryAsync();            
-        }
+        public async Task OneTimeSetUp() => await InitRepositoryAsync();
 
         [SetUp]
         public void SetUp()
