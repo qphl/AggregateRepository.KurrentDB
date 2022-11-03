@@ -5,12 +5,10 @@
 namespace CorshamScience.AggregateRepository.EventStore
 {
     using System;
-    using System.Linq;
     using System.Text;
     using CorshamScience.AggregateRepository.Core;
     using CorshamScience.AggregateRepository.Core.Exceptions;
-    using global::EventStore.ClientAPI;
-    using global::EventStore.ClientAPI.Exceptions;
+    using global::EventStore.Client;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -20,32 +18,33 @@ namespace CorshamScience.AggregateRepository.EventStore
     /// </summary>
     public class EventStoreAggregateRepository : IAggregateRepository
     {
-        private const int ReadPageSize = 1000;
-
-        private readonly IEventStoreConnection _connection;
+        private readonly EventStoreClient _eventStoreClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventStoreAggregateRepository"/> class using the provided <see cref="IEventStoreConnection"/> to store and retrieve events for an <see cref="IAggregate"/>.
+        /// Initializes a new instance of the <see cref="EventStoreAggregateRepository"/> class using the provided <see cref="EventStoreClient"/> to store and retrieve events for an <see cref="IAggregate"/>.
         /// </summary>
-        /// <param name="connection">The <see cref="IEventStoreConnection"/> to read from and write to.</param>
-        public EventStoreAggregateRepository(IEventStoreConnection connection) => _connection = connection;
+        /// <param name="eventStoreClient">The GRPC <see cref="EventStoreClient"/> to connect to.</param>
+        public EventStoreAggregateRepository(EventStoreClient eventStoreClient) => _eventStoreClient = eventStoreClient;
 
         /// <inheritdoc />
         /// <exception cref="AggregateNotFoundException">
-        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="IEventStoreConnection"/> is configured to use.
+        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="EventStoreClient"/> is configured to use.
         /// </exception>
         public void Save(IAggregate aggregateToSave)
         {
-            var newEvents = aggregateToSave.GetUncommittedEvents().Cast<object>().ToList();
-            var originalVersion = aggregateToSave.Version - newEvents.Count;
+            var events = aggregateToSave.GetUncommittedEvents().Cast<object>().ToList();
             var streamName = StreamNameForAggregateId(aggregateToSave.Id);
 
-            var expectedVersion = originalVersion == 0 ? ExpectedVersion.NoStream : originalVersion - 1;
-            var eventsToSave = newEvents.Select(e => ToEventData(Guid.NewGuid(), e)).ToList();
+            var originalVersion = aggregateToSave.Version - events.Count;
+            ulong expectedVersion = originalVersion == 0 ? expectedVersion = StreamRevision.None : (ulong)(originalVersion - 1);
+
+            var preparedEvents = events
+                .Select(ToEventData)
+                .ToArray();
 
             try
             {
-                _connection.AppendToStreamAsync(streamName, expectedVersion, eventsToSave).Wait();
+                _eventStoreClient.AppendToStreamAsync(streamName, expectedVersion, preparedEvents).Wait();
                 aggregateToSave.ClearUncommittedEvents();
             }
             catch (StreamDeletedException ex)
@@ -74,37 +73,33 @@ namespace CorshamScience.AggregateRepository.EventStore
             }
 
             var streamName = StreamNameForAggregateId(aggregateId);
-            var aggregate = (T)Activator.CreateInstance(typeof(T), true);
+            var events = ReadFromStream(streamName, version);
 
-            long sliceStart = 0;
-            var eventsCount = 0;
-            StreamEventsSlice currentSlice;
-            do
+            try
             {
-                var sliceCount = sliceStart + ReadPageSize <= version ? ReadPageSize : version - sliceStart + 1;
-                currentSlice = _connection.ReadStreamEventsForwardAsync(streamName, sliceStart, (int)sliceCount, false).Result;
-
-                // ReSharper disable once SwitchStatementMissingSomeCases
-                switch (currentSlice.Status)
-                {
-                    case SliceReadStatus.StreamNotFound:
-                    case SliceReadStatus.StreamDeleted:
-                        throw new AggregateNotFoundException();
-                }
-
-                sliceStart = currentSlice.NextEventNumber;
-
-                foreach (var evnt in currentSlice.Events)
-                {
-                    aggregate.ApplyEvent(DeserializeEvent(evnt.OriginalEvent.Metadata, evnt.OriginalEvent.Data));
-                }
-
-                eventsCount += currentSlice.Events.Length;
+                return CreateAndRehydrateAggregateAsync<T>(events, version).Result;
             }
-            while (version >= currentSlice.NextEventNumber && !currentSlice.IsEndOfStream);
+            catch (AggregateException ex) when (ex.InnerException is AggregateVersionException)
+            {
+                throw ex.InnerException;
+            }
+        }
 
-            // if version is greater than number of events, throw exception
-            if (eventsCount < version && version != int.MaxValue)
+        private static async Task<T> CreateAndRehydrateAggregateAsync<T>(EventStoreClient.ReadStreamResult events, int version)
+            where T : IAggregate
+        {
+            var aggregate = (T)Activator.CreateInstance(typeof(T), true) !;
+
+            var eventCount = 0;
+
+            await foreach (var @event in events)
+            {
+                eventCount++;
+                aggregate.ApplyEvent(Deserialize(@event));
+            }
+
+            // If version is greater than number of events, throw exception
+            if (eventCount < version && version != int.MaxValue)
             {
                 throw new AggregateVersionException("version is higher than actual version");
             }
@@ -112,27 +107,69 @@ namespace CorshamScience.AggregateRepository.EventStore
             return aggregate;
         }
 
-        private static object DeserializeEvent(byte[] metadata, byte[] data)
+        private static EventData ToEventData(object @event)
         {
-            var eventClrTypeName = JObject.Parse(Encoding.UTF8.GetString(metadata)).Property("ClrType").Value;
-            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data), Type.GetType((string)eventClrTypeName));
+            var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event));
+
+            var eventHeaders = new
+            {
+                ClrType = @event.GetType().AssemblyQualifiedName,
+            };
+
+            var metadata = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(eventHeaders));
+            var typeName = @event.GetType().Name;
+
+            return new (
+                Uuid.NewUuid(),
+                typeName,
+                data,
+                metadata);
+        }
+
+        private static object Deserialize(ResolvedEvent resolvedEvent)
+        {
+            const string metaDataPropertyName = "ClrType";
+
+            var jsonData = Encoding.UTF8.GetString(resolvedEvent.Event.Data.Span);
+            var metaData = Encoding.UTF8.GetString(resolvedEvent.Event.Metadata.Span);
+            var eventClrTypeName = JObject.Parse(metaData).Property(metaDataPropertyName)?.Value?.ToObject<string>();
+
+            if (eventClrTypeName is null)
+            {
+                throw new InvalidOperationException($"Event Metadata has no property '{metaDataPropertyName}'");
+            }
+
+            var type = Type.GetType(eventClrTypeName);
+            if (type is null)
+            {
+                throw new InvalidOperationException($"Could not find type ${eventClrTypeName}");
+            }
+
+            var deserialized = JsonConvert.DeserializeObject(jsonData, type);
+            if (deserialized is null)
+            {
+                throw new InvalidOperationException($"Failed to deserialize event of type ${eventClrTypeName}");
+            }
+
+            return deserialized;
         }
 
         private static string StreamNameForAggregateId(object id) => "aggregate-" + id;
 
-        private static EventData ToEventData(Guid eventId, object evnt)
+        private EventStoreClient.ReadStreamResult ReadFromStream(string streamName, int version)
         {
-            var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(evnt));
+            var events = _eventStoreClient.ReadStreamAsync(
+                Direction.Forwards,
+                streamName,
+                StreamPosition.Start,
+                version);
 
-            var eventHeaders = new
+            if (events.ReadState.Result != ReadState.Ok)
             {
-                ClrType = evnt.GetType().AssemblyQualifiedName,
-            };
+                throw new AggregateNotFoundException(streamName);
+            }
 
-            var metadata = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(eventHeaders));
-            var typeName = evnt.GetType().Name;
-
-            return new EventData(eventId, typeName, true, data, metadata);
+            return events;
         }
     }
 }

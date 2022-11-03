@@ -2,32 +2,63 @@
 // Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 
+using System.Runtime.InteropServices;
+using Grpc.Core.Interceptors;
+
 namespace CorshamScience.AggregateRepository.EventStore.Tests
 {
     using CorshamScience.AggregateRepository.EventStore;
-    using global::EventStore.ClientAPI;
-    using global::EventStore.ClientAPI.Embedded;
+    using DotNet.Testcontainers.Builders;
+    using DotNet.Testcontainers.Containers;
+    using DotNet.Testcontainers.Images;
+    using global::EventStore.Client;
 
-    public class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixture
+    internal class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixture
     {
-        private IEventStoreConnection _connection;
-        private EmbeddedEventStore _eventStore;
+        private ITestcontainersContainer? _container;
+        private EventStoreClient? _client;
 
-        protected override void InitRepository()
+        protected override async Task InitRepositoryAsync()
         {
-            _eventStore = new EmbeddedEventStore(11113, 12113);
-            _eventStore.Start();
+            const string eventStoreVersion = "21.10.8";
+            string imageName = RuntimeInformation.OSArchitecture == Architecture.Arm64
+                // if on arm (like an m1 mac) use the alpha arm image from github
+                ? $"ghcr.io/eventstore/eventstore:{eventStoreVersion}-alpha-arm64v8"
+                : $"eventstore/eventstore:{eventStoreVersion}-buster-slim";
+            
+            const int hostPort = 2113; 
+            _container = new TestcontainersBuilder<TestcontainersContainer>()
+              .WithImage(new DockerImage(imageName))
+              .WithCleanUp(true)
+              .WithPortBinding(hostPort)
+              .WithEnvironment(new Dictionary<string, string>
+              {
+                  { "EVENTSTORE_INSECURE", "true" },
+                  { "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP", "true" },
+              })
+              .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(hostPort))
+              .Build();
 
-            _connection = EmbeddedEventStoreConnection.Create(_eventStore.Node);
-            _connection.ConnectAsync().Wait();
+            await _container.StartAsync();
 
-            RepoUnderTest = new EventStoreAggregateRepository(_connection);
+            var settings = EventStoreClientSettings
+                .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=false");
+
+            _client = new EventStoreClient(settings);
+            RepoUnderTest = new EventStoreAggregateRepository(_client);
         }
 
-        protected override void CleanUpRepository()
+        protected override async Task CleanUpRepositoryAsync()
         {
-            _connection.Close();
-            _eventStore.Stop();
+            if (_container != null)
+            {
+                await _container.DisposeAsync();
+            }
+
+            if (_client != null)
+            {
+                await _client.DisposeAsync();
+            }
         }
     }
 }
