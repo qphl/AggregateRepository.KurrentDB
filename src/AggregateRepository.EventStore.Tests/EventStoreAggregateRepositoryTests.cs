@@ -21,7 +21,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
             const string eventStoreVersion = "22.10.1";
             string imageName = RuntimeInformation.OSArchitecture == Architecture.Arm64
                 // if on arm (like an m1 mac) use the alpha arm image from github
-                ? $"ghcr.io/eventstore/eventstore:22.10.1-alpha-arm64v8"
+                ? $"ghcr.io/eventstore/eventstore:{eventStoreVersion}-alpha-arm64v8"
                 : $"eventstore/eventstore:{eventStoreVersion}-buster-slim";
             
             const int hostPort = 2113;
