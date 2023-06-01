@@ -30,7 +30,7 @@ namespace CorshamScience.AggregateRepository.EventStore
         /// <exception cref="AggregateNotFoundException">
         /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="EventStoreClient"/> is configured to use.
         /// </exception>
-        public void Save(IAggregate aggregateToSave)
+        public async Task SaveAsync(IAggregate aggregateToSave)
         {
             var events = aggregateToSave.GetUncommittedEvents().Cast<object>().ToList();
             var streamName = StreamNameForAggregateId(aggregateToSave.Id);
@@ -44,27 +44,22 @@ namespace CorshamScience.AggregateRepository.EventStore
 
             try
             {
-                _eventStoreClient.AppendToStreamAsync(streamName, expectedVersion, preparedEvents).Wait();
+                await _eventStoreClient.AppendToStreamAsync(streamName, expectedVersion, preparedEvents)
+                    .ConfigureAwait(false);
                 aggregateToSave.ClearUncommittedEvents();
             }
             catch (StreamDeletedException ex)
             {
                 throw new AggregateNotFoundException("Aggregate not found, stream deleted", ex);
             }
-            catch (AggregateException ex)
+            catch (WrongExpectedVersionException ex)
             {
-                var exceptions = ex.InnerExceptions;
-                if (exceptions.Count == 1 && exceptions[0].GetType() == typeof(WrongExpectedVersionException))
-                {
-                    throw new AggregateVersionException("Aggregate version incorrect", ex);
-                }
-
-                throw;
+                throw new AggregateVersionException("Aggregate version incorrect", ex);
             }
         }
 
         /// <inheritdoc />
-        public T GetAggregateFromRepository<T>(object aggregateId, int version = int.MaxValue)
+        public async Task<T> GetAggregateAsync<T>(object aggregateId, int version = int.MaxValue)
             where T : IAggregate
         {
             if (version <= 0)
@@ -75,14 +70,7 @@ namespace CorshamScience.AggregateRepository.EventStore
             var streamName = StreamNameForAggregateId(aggregateId);
             var events = ReadFromStream(streamName, version);
 
-            try
-            {
-                return CreateAndRehydrateAggregateAsync<T>(events, version).Result;
-            }
-            catch (AggregateException ex) when (ex.InnerException is AggregateVersionException)
-            {
-                throw ex.InnerException;
-            }
+            return await CreateAndRehydrateAggregateAsync<T>(events, version).ConfigureAwait(false);
         }
 
         private static async Task<T> CreateAndRehydrateAggregateAsync<T>(EventStoreClient.ReadStreamResult events, int version)
@@ -92,7 +80,7 @@ namespace CorshamScience.AggregateRepository.EventStore
 
             var eventCount = 0;
 
-            await foreach (var @event in events)
+            await foreach (var @event in events.ConfigureAwait(false))
             {
                 eventCount++;
                 aggregate.ApplyEvent(Deserialize(@event));

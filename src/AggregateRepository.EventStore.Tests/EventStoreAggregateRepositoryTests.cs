@@ -16,12 +16,12 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
         private IContainer? _container;
         private EventStoreClient? _client;
 
-        protected override async Task InitRepositoryAsync()
+        protected override async Task InitRepository()
         {
             const string eventStoreVersion = "22.10.1";
             string imageName = RuntimeInformation.OSArchitecture == Architecture.Arm64
                 // if on arm (like an m1 mac) use the alpha arm image from github
-                ? $"ghcr.io/eventstore/eventstore:{eventStoreVersion}-alpha-arm64v8"
+                ? $"ghcr.io/eventstore/eventstore:22.10.1-alpha-arm64v8"
                 : $"eventstore/eventstore:{eventStoreVersion}-buster-slim";
             
             const int hostPort = 2113;
@@ -47,7 +47,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
             RepoUnderTest = new EventStoreAggregateRepository(_client);
         }
 
-        protected override async Task CleanUpRepositoryAsync()
+        protected override async Task CleanUpRepository()
         {
             if (_container != null)
             {
