@@ -18,7 +18,7 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
 
         protected override async Task InitRepositoryAsync()
         {
-            const string eventStoreVersion = "21.10.8";
+            const string eventStoreVersion = "22.10.1";
             string imageName = RuntimeInformation.OSArchitecture == Architecture.Arm64
                 // if on arm (like an m1 mac) use the alpha arm image from github
                 ? $"ghcr.io/eventstore/eventstore:{eventStoreVersion}-alpha-arm64v8"
