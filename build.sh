@@ -10,6 +10,4 @@ fi
 tag=${tag/tags\//}
 
 dotnet test .\\src\\AggregateRepository.EventStore.Tests\\AggregateRepository.EventStore.Tests.csproj
-if %errorlevel% neq 0 exit /b %errorlevel%
-
 dotnet pack .\\src\\AggregateRepository.EventStore\\AggregateRepository.EventStore.csproj -o .\\dist -p:Version="$version" -p:PackageVersion="$version" -p:Tag="$tag" -c Release
