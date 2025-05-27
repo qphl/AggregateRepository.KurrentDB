@@ -34,10 +34,6 @@
 
   <ItemGroup>
     <PackageReference Include="CorshamScience.AggregateRepository.Core" Version="3.0.0" />
-    <PackageReference Include="CorshamScience.CodeStyle.CSharp.Full" Version="3.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="KurrentDB.Client" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>

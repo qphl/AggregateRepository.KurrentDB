@@ -1,13 +1,10 @@
-﻿// <copyright file="TestAggregateCreated.cs" company="Corsham Science">
-// Copyright (c) Corsham Science. All rights reserved.
-// </copyright>
+﻿// Copyright (c) Pharmaxo. All rights reserved.
 
-namespace CorshamScience.AggregateRepository.EventStore.Tests
+namespace CorshamScience.AggregateRepository.EventStore.Tests;
+
+internal class TestAggregateCreated
 {
-    internal class TestAggregateCreated
-    {
-        public TestAggregateCreated(object aggregateId) => AggregateId = aggregateId;
+    public TestAggregateCreated(object aggregateId) => AggregateId = aggregateId;
 
-        public object AggregateId { get; }
-    }
+    public object AggregateId { get; }
 }

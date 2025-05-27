@@ -1,15 +1,11 @@
-﻿// <copyright file="TestEvent.cs" company="Corsham Science">
-// Copyright (c) Corsham Science. All rights reserved.
-// </copyright>
+﻿// Copyright (c) Pharmaxo. All rights reserved.
 
-namespace CorshamScience.AggregateRepository.EventStore.Tests
+using System;
+
+namespace CorshamScience.AggregateRepository.EventStore.Tests;
+internal class TestEvent
 {
-    using System;
+    public TestEvent(Guid eventId) => EventId = eventId;
 
-    internal class TestEvent
-    {
-        public TestEvent(Guid eventId) => EventId = eventId;
-
-        public Guid EventId { get; }
-    }
+    public Guid EventId { get; }
 }
