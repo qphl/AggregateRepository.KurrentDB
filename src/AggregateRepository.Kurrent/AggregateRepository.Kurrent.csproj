@@ -7,8 +7,8 @@
     <Nullable>enable</Nullable>
     <AssemblyName>PharmaxoScientific.AggregateRepository.Kurrent</AssemblyName>
     <RootNamespace>PharmaxoScientific.AggregateRepository.Kurrent</RootNamespace>
-    <Authors>Corsham Science</Authors>
-    <Company>Corsham Science</Company>
+    <Authors>Pharmaxo Scientific</Authors>
+    <Company>Pharmaxo Scientific</Company>
     <Description>KurrentDB implementation for saving and rebuilding objects from event streams.</Description>
     <Copyright>PharmaxoScientific 2025</Copyright>
     <PackageProjectUrl>https://github.com/qphl/AggregateRepository.EventStore</PackageProjectUrl>
