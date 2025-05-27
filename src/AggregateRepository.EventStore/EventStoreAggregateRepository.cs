@@ -15,7 +15,7 @@ namespace CorshamScience.AggregateRepository.EventStore
 
     /// <inheritdoc />
     /// <summary>
-    /// Implementation of <see cref="T:CorshamScience.AggregateRepository.Core.IAggregateRepository" /> which uses Event Store as underlying storage for an aggregate's events.
+    /// Implementation of <see cref="T:CorshamScience.AggregateRepository.Core.IAggregateRepository" /> which uses KurrentDB as underlying storage for an aggregate's events.
     /// </summary>
     public class EventStoreAggregateRepository : IAggregateRepository
     {
@@ -29,7 +29,7 @@ namespace CorshamScience.AggregateRepository.EventStore
 
         /// <inheritdoc />
         /// <exception cref="AggregateNotFoundException">
-        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="KurrentDBClient"/> is configured to use.
+        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the KurrentDB the <see cref="KurrentDBClient"/> is configured to use.
         /// </exception>
         public async Task SaveAsync(IAggregate aggregateToSave)
         {
@@ -119,8 +119,8 @@ namespace CorshamScience.AggregateRepository.EventStore
         {
             const string metaDataPropertyName = "ClrType";
 
-            var jsonData = Encoding.UTF8.GetString(resolvedEvent.Event.Data.Span);
-            var metaData = Encoding.UTF8.GetString(resolvedEvent.Event.Metadata.Span);
+            var jsonData = Encoding.UTF8.GetString(resolvedEvent.Event.Data.Span.ToArray());
+            var metaData = Encoding.UTF8.GetString(resolvedEvent.Event.Metadata.Span.ToArray());
             var eventClrTypeName = JObject.Parse(metaData).Property(metaDataPropertyName)?.Value?.ToObject<string>();
 
             if (eventClrTypeName is null)
