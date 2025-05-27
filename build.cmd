@@ -10,6 +10,9 @@ SET TAG=%TAG:tags/=%
 curl -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 .\\nuget.exe restore .\\src\\AggregateRepository.Kurrent.Tests\\AggregateRepository.Kurrent.Tests.csproj -PackagesDirectory .\\src\\packages -Verbosity detailed
 
+dotnet format .\src\AggregateRepository.Kurrent.sln --severity warn --verify-no-changes -v diag
+if %errorlevel% neq 0 exit /b %errorlevel%
+
 dotnet test .\src\AggregateRepository.Kurrent.Tests\AggregateRepository.Kurrent.Tests.csproj
 if %errorlevel% neq 0 exit /b %errorlevel%
 
