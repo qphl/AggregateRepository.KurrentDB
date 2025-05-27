@@ -18,12 +18,10 @@ internal class KurrentDbAggregateRepositoryTests : AggregateRepositoryTestFixtur
     {
         const string eventStoreVersion = "24.10.5";
 
-        // If on arm (like an m1 mac) use the alpha arm image from github
-        var architectureSuffix = RuntimeInformation.OSArchitecture == Architecture.Arm64
-            ? "-alpha-arm64v8"
-            : "-bookworm-slim";
-
-        var imageName = $"eventstore/eventstore:{eventStoreVersion}{architectureSuffix}";
+        var imageName = RuntimeInformation.OSArchitecture == Architecture.Arm64
+            // if on arm (like an m1 mac) use the alpha arm image from github
+            ? $"ghcr.io/eventstore/eventstore:{eventStoreVersion}-alpha-arm64v8"
+            : $"eventstore/eventstore:{eventStoreVersion}-bookworm-slim";
 
         const int hostPort = 2113;
 
