@@ -13,15 +13,15 @@ namespace PharmaxoScientific.AggregateRepository.Kurrent;
 /// <summary>
 /// Implementation of <see cref="T:CorshamScience.AggregateRepository.Core.IAggregateRepository" /> which uses KurrentDB as underlying storage for an aggregate's events.
 /// </summary>
-public class EventStoreAggregateRepository : IAggregateRepository
+public class KurrentDbAggregateRepository : IAggregateRepository
 {
     private readonly KurrentDBClient _kurrentDbClient;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EventStoreAggregateRepository"/> class using the provided <see cref="KurrentDBClient"/> to store and retrieve events for an <see cref="IAggregate"/>.
+    /// Initializes a new instance of the <see cref="KurrentDbAggregateRepository"/> class using the provided <see cref="KurrentDBClient"/> to store and retrieve events for an <see cref="IAggregate"/>.
     /// </summary>
     /// <param name="kurrentDbClient">The GRPC <see cref="KurrentDBClient"/> to connect to.</param>
-    public EventStoreAggregateRepository(KurrentDBClient kurrentDbClient) => _kurrentDbClient = kurrentDbClient;
+    public KurrentDbAggregateRepository(KurrentDBClient kurrentDbClient) => _kurrentDbClient = kurrentDbClient;
 
     /// <inheritdoc />
     /// <exception cref="AggregateNotFoundException">

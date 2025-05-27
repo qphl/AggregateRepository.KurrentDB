@@ -26,7 +26,7 @@ public abstract class AggregateRepositoryTestFixture
     public async Task TearDown() => await CleanUpRepository();
 
     [Test]
-    public void Retreiving_an_aggregate_from_an_empty_eventstore_should_throw_an_exception() => Assert.ThrowsAsync<AggregateNotFoundException>(async () => await RepoUnderTest.GetAggregateAsync<TestAggregate>(_aggregateIdUnderTest));
+    public void Retreiving_an_aggregate_from_an_empty_kurrentdb_should_throw_an_exception() => Assert.ThrowsAsync<AggregateNotFoundException>(async () => await RepoUnderTest.GetAggregateAsync<TestAggregate>(_aggregateIdUnderTest));
 
     [Test]
     public async Task Retreiving_a_nonexistant_aggregate_id_should_throw_an_exception()

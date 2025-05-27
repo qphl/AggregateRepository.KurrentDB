@@ -9,7 +9,7 @@ using PharmaxoScientific.AggregateRepository.Kurrent;
 
 namespace AggregateRepository.Kurrent.Tests;
 
-internal class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixture
+internal class KurrentDbAggregateRepositoryTests : AggregateRepositoryTestFixture
 {
     private IContainer? _container;
     private KurrentDBClient? _client;
@@ -45,7 +45,7 @@ internal class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixtu
             .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=false");
 
         _client = new KurrentDBClient(settings);
-        RepoUnderTest = new EventStoreAggregateRepository(_client);
+        RepoUnderTest = new KurrentDbAggregateRepository(_client);
     }
 
     protected override async Task CleanUpRepository()
