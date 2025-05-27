@@ -2,7 +2,8 @@
 
 using CorshamScience.AggregateRepository.Core;
 
-namespace CorshamScience.AggregateRepository.EventStore.Tests;
+namespace AggregateRepository.Kurrent.Tests;
+
 internal sealed class TestAggregate : AggregateBase
 {
     private object _id = null!;

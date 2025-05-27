@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Pharmaxo. All rights reserved.
 
-namespace CorshamScience.AggregateRepository.EventStore.Tests;
+namespace AggregateRepository.Kurrent.Tests;
 
 internal class TestAggregateCreated
 {

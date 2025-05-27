@@ -2,9 +2,8 @@
 
 using CorshamScience.AggregateRepository.Core;
 using CorshamScience.AggregateRepository.Core.Exceptions;
-using CorshamScience.AggregateRepository.EventStore.Tests;
 
-namespace AggregateRepository.EventStore.Tests;
+namespace AggregateRepository.Kurrent.Tests;
 
 [TestFixture]
 public abstract class AggregateRepositoryTestFixture

@@ -5,19 +5,19 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>CorshamScience.AggregateRepository.EventStore</AssemblyName>
-    <RootNamespace>CorshamScience.AggregateRepository.EventStore</RootNamespace>
+    <AssemblyName>PharmaxoScientific.AggregateRepository.Kurrent</AssemblyName>
+    <RootNamespace>PharmaxoScientific.AggregateRepository.Kurrent</RootNamespace>
     <Authors>Corsham Science</Authors>
     <Company>Corsham Science</Company>
-    <Description>EventStore implementation for saving and rebuilding objects from event streams.</Description>
-    <Copyright>Corsham Science 2022</Copyright>
+    <Description>KurrentDB implementation for saving and rebuilding objects from event streams.</Description>
+    <Copyright>PharmaxoScientific 2025</Copyright>
     <PackageProjectUrl>https://github.com/qphl/AggregateRepository.EventStore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/qphl/AggregateRepository.EventStore</RepositoryUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/qphl/AggregateRepository.EventStore/master/logo.png</PackageIconUrl>
-    <PackageTags>Event Store, Event Sourcing, Aggregate Repository</PackageTags>
-    <Product>CorshamScience.AggregateRepository</Product>
+    <PackageTags>Event Store, KurrentDB, Event Sourcing, Aggregate Repository</PackageTags>
+    <Product>PharmaxoScientific.AggregateRepository</Product>
     <PackageReleaseNotes>https://GitHub.com/qphl/AggregateRepository.EventStore/releases/tag/</PackageReleaseNotes>
-    <PackageId>CorshamScience.AggregateRepository.EventStore</PackageId>
+    <PackageId>PharmaxoScientific.AggregateRepository.Kurrent</PackageId>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageIcon>Logo.png</PackageIcon>
   </PropertyGroup>
