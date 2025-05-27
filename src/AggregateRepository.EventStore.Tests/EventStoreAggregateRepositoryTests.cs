@@ -9,20 +9,23 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
     using System.Runtime.InteropServices;
     using DotNet.Testcontainers.Images;
     using DotNet.Testcontainers.Containers;
-    using global::EventStore.Client;
+    using KurrentDB.Client;
 
     internal class EventStoreAggregateRepositoryTests : AggregateRepositoryTestFixture
     {
         private IContainer? _container;
-        private EventStoreClient? _client;
+        private KurrentDBClient? _client;
 
         protected override async Task InitRepository()
         {
-            const string eventStoreVersion = "23.10.0";
-            var imageName = RuntimeInformation.OSArchitecture == Architecture.Arm64
-                // if on arm (like an m1 mac) use the alpha arm image from github
-                ? $"ghcr.io/eventstore/eventstore:{eventStoreVersion}-alpha-arm64v8"
-                : $"eventstore/eventstore:{eventStoreVersion}-bookworm-slim";
+            const string eventStoreVersion = "24.10.5";
+
+            // If on arm (like an m1 mac) use the alpha arm image from github
+            var architectureSuffix = RuntimeInformation.OSArchitecture == Architecture.Arm64
+                ? "-alpha-arm64v8"
+                : "-bookworm-slim";
+
+            var imageName = $"eventstore/eventstore:{eventStoreVersion}{architectureSuffix}";
             
             const int hostPort = 2113;
             
@@ -40,10 +43,10 @@ namespace CorshamScience.AggregateRepository.EventStore.Tests
 
             await _container.StartAsync();
 
-            var settings = EventStoreClientSettings
+            var settings = KurrentDBClientSettings
                 .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=false");
 
-            _client = new EventStoreClient(settings);
+            _client = new KurrentDBClient(settings);
             RepoUnderTest = new EventStoreAggregateRepository(_client);
         }
 

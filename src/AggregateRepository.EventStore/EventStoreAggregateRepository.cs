@@ -2,13 +2,14 @@
 // Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 
+using KurrentDB.Client;
+
 namespace CorshamScience.AggregateRepository.EventStore
 {
     using System;
     using System.Text;
-    using CorshamScience.AggregateRepository.Core;
-    using CorshamScience.AggregateRepository.Core.Exceptions;
-    using global::EventStore.Client;
+    using Core;
+    using Core.Exceptions;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -18,17 +19,17 @@ namespace CorshamScience.AggregateRepository.EventStore
     /// </summary>
     public class EventStoreAggregateRepository : IAggregateRepository
     {
-        private readonly EventStoreClient _eventStoreClient;
+        private readonly KurrentDBClient _kurrentDbClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventStoreAggregateRepository"/> class using the provided <see cref="EventStoreClient"/> to store and retrieve events for an <see cref="IAggregate"/>.
+        /// Initializes a new instance of the <see cref="EventStoreAggregateRepository"/> class using the provided <see cref="KurrentDBClient"/> to store and retrieve events for an <see cref="IAggregate"/>.
         /// </summary>
-        /// <param name="eventStoreClient">The GRPC <see cref="EventStoreClient"/> to connect to.</param>
-        public EventStoreAggregateRepository(EventStoreClient eventStoreClient) => _eventStoreClient = eventStoreClient;
+        /// <param name="kurrentDbClient">The GRPC <see cref="KurrentDBClient"/> to connect to.</param>
+        public EventStoreAggregateRepository(KurrentDBClient kurrentDbClient) => _kurrentDbClient = kurrentDbClient;
 
         /// <inheritdoc />
         /// <exception cref="AggregateNotFoundException">
-        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="EventStoreClient"/> is configured to use.
+        /// Thrown when the provided <see cref="IAggregate"/>'s ID matches a deleted stream in the EventStore the <see cref="KurrentDBClient"/> is configured to use.
         /// </exception>
         public async Task SaveAsync(IAggregate aggregateToSave)
         {
@@ -36,7 +37,7 @@ namespace CorshamScience.AggregateRepository.EventStore
             var streamName = StreamNameForAggregateId(aggregateToSave.Id);
 
             var originalVersion = aggregateToSave.Version - events.Count;
-            ulong expectedVersion = originalVersion == 0 ? expectedVersion = StreamRevision.None : (ulong)(originalVersion - 1);
+            var expectedVersion = originalVersion == 0 ? StreamState.NoStream : StreamState.StreamRevision((ulong)originalVersion - 1);
 
             var preparedEvents = events
                 .Select(ToEventData)
@@ -44,7 +45,7 @@ namespace CorshamScience.AggregateRepository.EventStore
 
             try
             {
-                await _eventStoreClient.AppendToStreamAsync(streamName, expectedVersion, preparedEvents)
+                await _kurrentDbClient.AppendToStreamAsync(streamName, expectedVersion, preparedEvents)
                     .ConfigureAwait(false);
                 aggregateToSave.ClearUncommittedEvents();
             }
@@ -73,7 +74,7 @@ namespace CorshamScience.AggregateRepository.EventStore
             return await CreateAndRehydrateAggregateAsync<T>(events, version).ConfigureAwait(false);
         }
 
-        private static async Task<T> CreateAndRehydrateAggregateAsync<T>(EventStoreClient.ReadStreamResult events, int version)
+        private static async Task<T> CreateAndRehydrateAggregateAsync<T>(KurrentDBClient.ReadStreamResult events, int version)
             where T : IAggregate
         {
             var aggregate = (T)Activator.CreateInstance(typeof(T), true) !;
@@ -144,9 +145,9 @@ namespace CorshamScience.AggregateRepository.EventStore
 
         private static string StreamNameForAggregateId(object id) => "aggregate-" + id;
 
-        private EventStoreClient.ReadStreamResult ReadFromStream(string streamName, int version)
+        private KurrentDBClient.ReadStreamResult ReadFromStream(string streamName, int version)
         {
-            var events = _eventStoreClient.ReadStreamAsync(
+            var events = _kurrentDbClient.ReadStreamAsync(
                 Direction.Forwards,
                 streamName,
                 StreamPosition.Start,
