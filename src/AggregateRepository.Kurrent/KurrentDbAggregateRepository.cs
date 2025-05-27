@@ -33,8 +33,8 @@ public class KurrentDbAggregateRepository : IAggregateRepository
         var streamName = StreamNameForAggregateId(aggregateToSave.Id);
 
         var originalVersion = aggregateToSave.Version - events.Count;
-        var expectedVersion = originalVersion == 0 ? StreamState.NoStream : StreamState.StreamRevision((ulong)originalVersion - 1);
-
+        var expectedVersion = originalVersion == 0 ? StreamState.NoStream : (ulong)(originalVersion - 1);
+        
         var preparedEvents = events
             .Select(ToEventData)
             .ToArray();
