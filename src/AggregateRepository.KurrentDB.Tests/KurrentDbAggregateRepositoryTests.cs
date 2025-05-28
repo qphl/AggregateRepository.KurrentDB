@@ -5,9 +5,9 @@ using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Images;
 using KurrentDB.Client;
-using PharmaxoScientific.AggregateRepository.Kurrent;
+using PharmaxoScientific.AggregateRepository.KurrentDB;
 
-namespace AggregateRepository.Kurrent.Tests;
+namespace AggregateRepository.KurrentDB.Tests;
 
 internal class KurrentDbAggregateRepositoryTests : AggregateRepositoryTestFixture
 {

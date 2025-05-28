@@ -5,8 +5,8 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>PharmaxoScientific.AggregateRepository.Kurrent</AssemblyName>
-    <RootNamespace>PharmaxoScientific.AggregateRepository.Kurrent</RootNamespace>
+    <AssemblyName>PharmaxoScientific.AggregateRepository.KurrentDB</AssemblyName>
+    <RootNamespace>PharmaxoScientific.AggregateRepository.KurrentDB</RootNamespace>
     <Authors>Pharmaxo Scientific</Authors>
     <Company>Pharmaxo Scientific</Company>
     <Description>KurrentDB implementation for saving and rebuilding objects from event streams.</Description>
@@ -15,15 +15,15 @@
     <RepositoryUrl>https://github.com/qphl/AggregateRepository.EventStore</RepositoryUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/qphl/AggregateRepository.EventStore/master/logo.png</PackageIconUrl>
     <PackageTags>Event Store, KurrentDB, Event Sourcing, Aggregate Repository</PackageTags>
-    <Product>PharmaxoScientific.AggregateRepository</Product>
+    <Product>PharmaxoScientific.AggregateRepository.KurrentDB</Product>
     <PackageReleaseNotes>https://GitHub.com/qphl/AggregateRepository.EventStore/releases/tag/</PackageReleaseNotes>
-    <PackageId>PharmaxoScientific.AggregateRepository.Kurrent</PackageId>
+    <PackageId>PharmaxoScientific.AggregateRepository.KurrentDB</PackageId>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageIcon>Logo.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\CorshamScience.AggregateRepository.EventStore.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

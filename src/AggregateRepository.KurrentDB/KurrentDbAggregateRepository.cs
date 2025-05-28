@@ -7,7 +7,7 @@ using KurrentDB.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace PharmaxoScientific.AggregateRepository.Kurrent;
+namespace PharmaxoScientific.AggregateRepository.KurrentDB;
 
 /// <inheritdoc />
 /// <summary>

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Pharmaxo. All rights reserved.
 
-namespace AggregateRepository.Kurrent.Tests;
+namespace AggregateRepository.KurrentDB.Tests;
 
 internal class TestAggregateCreated
 {

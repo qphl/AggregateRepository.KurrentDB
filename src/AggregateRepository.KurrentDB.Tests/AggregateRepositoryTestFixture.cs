@@ -3,7 +3,7 @@
 using CorshamScience.AggregateRepository.Core;
 using CorshamScience.AggregateRepository.Core.Exceptions;
 
-namespace AggregateRepository.Kurrent.Tests;
+namespace AggregateRepository.KurrentDB.Tests;
 
 [TestFixture]
 public abstract class AggregateRepositoryTestFixture

@@ -2,7 +2,7 @@
 
 using CorshamScience.AggregateRepository.Core;
 
-namespace AggregateRepository.Kurrent.Tests;
+namespace AggregateRepository.KurrentDB.Tests;
 
 internal sealed class TestAggregate : AggregateBase
 {
