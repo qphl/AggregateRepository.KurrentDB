@@ -34,7 +34,7 @@ public class KurrentDbAggregateRepository : IAggregateRepository
 
         var originalVersion = aggregateToSave.Version - events.Count;
         var expectedVersion = originalVersion == 0 ? StreamState.NoStream : (ulong)(originalVersion - 1);
-        
+
         var preparedEvents = events
             .Select(ToEventData)
             .ToArray();
