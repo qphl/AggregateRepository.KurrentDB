@@ -11,25 +11,25 @@
     <Company>Pharmaxo Scientific</Company>
     <Description>KurrentDB implementation for saving and rebuilding objects from event streams.</Description>
     <Copyright>Pharmaxo Scientific 2025</Copyright>
-    <PackageProjectUrl>https://github.com/qphl/AggregateRepository.EventStore</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/qphl/AggregateRepository.EventStore</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/qphl/AggregateRepository.EventStore/master/logo.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/qphl/AggregateRepository.KurrentDB</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/qphl/AggregateRepository.KurrentDB</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/qphl/AggregateRepository.KurrentDB/master/logo.png</PackageIconUrl>
     <PackageTags>Event Store, KurrentDB, Event Sourcing, Aggregate Repository</PackageTags>
     <Product>PharmaxoScientific.AggregateRepository.KurrentDB</Product>
-    <PackageReleaseNotes>https://GitHub.com/qphl/AggregateRepository.EventStore/releases/tag/</PackageReleaseNotes>
+    <PackageReleaseNotes>https://GitHub.com/qphl/AggregateRepository.KurrentDB/releases/tag/</PackageReleaseNotes>
     <PackageId>PharmaxoScientific.AggregateRepository.KurrentDB</PackageId>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageIcon>Logo.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>bin\Debug\net8.0\PharmaxoScientific.AggregateRepository.KurrentDB.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <DocumentationFile>bin\Release\netstandard2.0\CorshamScience.AggregateRepository.Persistence.EventStore.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net8.0\PharmaxoScientific.AggregateRepository.KurrentDB.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
