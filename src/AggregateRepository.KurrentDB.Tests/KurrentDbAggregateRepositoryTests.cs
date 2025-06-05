@@ -29,9 +29,11 @@ internal class KurrentDbAggregateRepositoryTests : AggregateRepositoryTestFixtur
           .WithImage(new DockerImage(imageName))
           .WithCleanUp(true)
           .WithPortBinding(hostPort)
+          .WithCreateParameterModifier(cmd => cmd.User = "root")
           .WithEnvironment(new Dictionary<string, string>
           {
-              { "EVENTSTORE_INSECURE", "true" },
+              { "EVENTSTORE_INSECURE", "false" },
+              { "EVENTSTORE_DEV", "true" },
               { "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP", "true" },
           })
           .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(hostPort))
@@ -40,7 +42,7 @@ internal class KurrentDbAggregateRepositoryTests : AggregateRepositoryTestFixtur
         await _container.StartAsync();
 
         var settings = KurrentDBClientSettings
-            .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=false");
+            .Create($"esdb://admin:changeit@127.0.0.1:{hostPort}?tls=true&tlsVerifyCert=false");
 
         _client = new KurrentDBClient(settings);
         RepoUnderTest = new KurrentDbAggregateRepository(_client);
