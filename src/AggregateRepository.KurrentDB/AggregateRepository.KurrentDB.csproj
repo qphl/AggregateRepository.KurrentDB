@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net481</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PharmaxoScientific.AggregateRepository.KurrentDB</AssemblyName>
+    <RootNamespace>PharmaxoScientific.AggregateRepository.KurrentDB</RootNamespace>
+    <Authors>Pharmaxo Scientific</Authors>
+    <Company>Pharmaxo Scientific</Company>
+    <Description>KurrentDB implementation for saving and rebuilding objects from event streams.</Description>
+    <Copyright>Pharmaxo Scientific 2025</Copyright>
+    <PackageProjectUrl>https://github.com/qphl/AggregateRepository.KurrentDB</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/qphl/AggregateRepository.KurrentDB</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/qphl/AggregateRepository.KurrentDB/master/logo.png</PackageIconUrl>
+    <PackageTags>Event Store, KurrentDB, Event Sourcing, Aggregate Repository</PackageTags>
+    <Product>PharmaxoScientific.AggregateRepository.KurrentDB</Product>
+    <PackageReleaseNotes>https://GitHub.com/qphl/AggregateRepository.KurrentDB/releases/tag/</PackageReleaseNotes>
+    <PackageId>PharmaxoScientific.AggregateRepository.KurrentDB</PackageId>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageIcon>Logo.png</PackageIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\net8.0\PharmaxoScientific.AggregateRepository.KurrentDB.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <DocumentationFile>bin\Release\net8.0\PharmaxoScientific.AggregateRepository.KurrentDB.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CorshamScience.AggregateRepository.Core" Version="3.0.0" />
+    <PackageReference Include="KurrentDB.Client" Version="1.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Logo.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+</Project>

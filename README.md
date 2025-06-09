@@ -1,6 +1,6 @@
-cr-aggregaterepository
+Pharmaxo Scientific Aggregate Repository
 ======================
 
-Common library for saving and rebuilding of objects from event streams - Includes JOliver, GetEventStore and InMemory Implementations
+Common library for saving and rebuilding of objects from Kurrent DB event streams using the KurrentDBClient.
 
-[![cognisant-libs MyGet Build Status](https://www.myget.org/BuildSource/Badge/cognisant-libs?identifier=a31a1e31-93c4-4e75-8491-957e0983949f)](https://www.myget.org/)
+[Pharmaxo Scientific Aggregate Repository](https://www.nuget.org/packages/PharmaxoScientific.AggregateRepository.KurrentDB)
